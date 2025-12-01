@@ -1,0 +1,794 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  user-select: none;
+}
+
+:root {
+  --color-cream: #f8f3e6;
+  --color-vintage: #f5e8d0;
+  --color-warm: #f2e2c4;
+  --color-kraft: #d7b88e;
+  --color-pastel-blue: #c9e4f5;
+  --color-pastel-pink: #f5c9d3;
+  --color-pastel-green: #d4f0d4;
+  --shadow-soft: rgba(0, 0, 0, 0.1);
+  --shadow-medium: rgba(0, 0, 0, 0.2);
+  --shadow-hard: rgba(0, 0, 0, 0.3);
+}
+
+body {
+  font-family: "Quicksand", sans-serif;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  overflow-x: hidden;
+}
+
+/* Shelf UI */
+.shelf-container {
+  width: 100%;
+  max-width: 1200px;
+  position: relative;
+}
+
+.shelf {
+  background: linear-gradient(to bottom, #8b7355, #a1886f);
+  height: 30px;
+  border-radius: 5px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  margin-bottom: 40px;
+  position: relative;
+  z-index: 10;
+}
+
+.shelf::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 10px;
+  right: 10px;
+  height: 10px;
+  background: linear-gradient(to bottom, #7a6349, #8b7355);
+  border-radius: 0 0 5px 5px;
+}
+
+.books-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+  justify-content: center;
+  padding: 20px;
+}
+
+/* Album Book Cover */
+.album-book {
+  width: 200px;
+  height: 280px;
+  position: relative;
+  cursor: pointer;
+  transform-style: preserve-3d;
+  transition: transform 0.5s ease;
+  transform-origin: left center;
+  z-index: 5;
+}
+
+.album-book:hover {
+  transform: translateY(-10px);
+}
+
+.album-cover {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  border-radius: 5px 10px 10px 5px;
+  box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.3);
+  backface-visibility: hidden;
+  overflow: hidden;
+}
+
+.album-cover::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    45deg,
+    rgba(0, 0, 0, 0.1) 0%,
+    rgba(255, 255, 255, 0.1) 100%
+  );
+}
+
+.album-spine {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 20px;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  border-radius: 5px 0 0 5px;
+  transform: translateZ(-1px);
+}
+
+.album-title {
+  position: absolute;
+  bottom: 20px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  color: white;
+  font-weight: bold;
+  font-size: 18px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  padding: 10px;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+/* Modal for creating albums */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 1000;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal.active {
+  display: flex;
+}
+
+.modal-content {
+  background: white;
+  padding: 30px;
+  border-radius: 15px;
+  max-width: 500px;
+  width: 90%;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.modal h2 {
+  margin-bottom: 20px;
+  color: #5a3921;
+  font-family: "Dancing Script", cursive;
+  font-size: 32px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #555;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  font-family: "Quicksand", sans-serif;
+  font-size: 16px;
+  transition: border 0.3s;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  border-color: #a1886f;
+  outline: none;
+}
+
+.upload-area {
+  border: 3px dashed #ccc;
+  border-radius: 10px;
+  padding: 30px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s;
+  margin-bottom: 20px;
+}
+
+.upload-area:hover {
+  border-color: #a1886f;
+  background: #f9f5f0;
+}
+
+.upload-area i {
+  font-size: 48px;
+  color: #a1886f;
+  margin-bottom: 10px;
+}
+
+.btn {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  font-family: "Quicksand", sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.btn-primary {
+  background: #a1886f;
+  color: white;
+}
+
+.btn-primary:hover {
+  background: #8b7355;
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.btn-secondary {
+  background: #f0f0f0;
+  color: #555;
+  margin-right: 10px;
+}
+
+.btn-secondary:hover {
+  background: #e0e0e0;
+}
+
+.text-center {
+  text-align: center;
+}
+
+/* Album viewer */
+.album-viewer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  z-index: 500;
+  display: none;
+  overflow: hidden;
+}
+
+.album-viewer.active {
+  display: block;
+}
+
+.book-3d {
+  position: absolute;
+  width: 800px;
+  height: 600px;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  transform-style: preserve-3d;
+  perspective: 2000px;
+}
+
+.page {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: var(--color-cream);
+  border-radius: 5px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+  transform-origin: left center;
+  transition: transform 1s cubic-bezier(0.645, 0.045, 0.355, 1);
+  display: flex;
+  flex-wrap: wrap;
+  padding: 30px;
+  overflow: hidden;
+}
+
+.page.left-page {
+  background: var(--color-cream);
+  z-index: 2;
+}
+
+.page.right-page {
+  background: var(--color-cream);
+  z-index: 1;
+}
+
+.page-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  opacity: 0.3;
+}
+
+.page.kraft-bg .page-background {
+  background-image: url('data:image/svg+xml;utf8,<svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M0,0 L100,0 L100,100 L0,100 Z" fill="%23d7b88e"/></svg>');
+}
+
+.page.grid-bg .page-background {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.1) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+.page.pastel-bg .page-background {
+  background: linear-gradient(
+    45deg,
+    var(--color-pastel-pink) 25%,
+    var(--color-pastel-blue) 25%,
+    var(--color-pastel-blue) 50%,
+    var(--color-pastel-pink) 50%,
+    var(--color-pastel-pink) 75%,
+    var(--color-pastel-blue) 75%
+  );
+  background-size: 40px 40px;
+  opacity: 0.2;
+}
+
+/* Polaroid styles */
+.polaroid-container {
+  position: relative;
+  margin: 15px;
+  transition: transform 0.3s;
+}
+
+.polaroid {
+  width: 200px;
+  height: 250px;
+  background: white;
+  padding: 15px 15px 60px 15px;
+  box-shadow: 2px 5px 15px rgba(0, 0, 0, 0.2);
+  position: relative;
+  transition: transform 0.3s;
+}
+
+.polaroid:hover {
+  transform: translateY(-5px);
+  box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.25);
+}
+
+.polaroid::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('data:image/svg+xml;utf8,<svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="1" result="noise"/><feColorMatrix type="saturate" values="0"/></filter><rect width="100" height="100" filter="url(%23noise)" opacity="0.1"/></svg>');
+  pointer-events: none;
+}
+
+/* Polaroid variants */
+.polaroid.classic {
+  background: white;
+}
+
+.polaroid.vintage {
+  background: var(--color-vintage);
+}
+
+.polaroid.warm {
+  background: var(--color-warm);
+}
+
+.polaroid.pastel-blue {
+  background: var(--color-pastel-blue);
+}
+
+.polaroid.pastel-pink {
+  background: var(--color-pastel-pink);
+}
+
+.polaroid.pastel-green {
+  background: var(--color-pastel-green);
+}
+
+.polaroid.minimalist {
+  padding: 5px;
+  background: white;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.polaroid.minimalist .polaroid-image {
+  border: 1px solid #eee;
+}
+
+.polaroid.taped::before {
+  content: "";
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.7);
+  transform: rotate(45deg);
+  top: -15px;
+  left: -15px;
+  z-index: 1;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.polaroid.taped::after {
+  content: "";
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.7);
+  transform: rotate(45deg);
+  bottom: -15px;
+  right: -15px;
+  z-index: 1;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.polaroid-image {
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  background-color: #f0f0f0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #aaa;
+  font-size: 14px;
+}
+
+.polaroid-image i {
+  font-size: 48px;
+  opacity: 0.5;
+}
+
+.polaroid-caption {
+  position: absolute;
+  bottom: 15px;
+  left: 15px;
+  right: 15px;
+  height: 40px;
+  padding: 5px;
+  background: transparent;
+  border: none;
+  font-family: inherit;
+  font-size: 14px;
+  text-align: center;
+  overflow: hidden;
+  resize: none;
+  outline: none;
+}
+
+.caption-handwritten {
+  font-family: "Gochi Hand", cursive;
+  font-size: 16px;
+}
+
+.caption-typewriter {
+  font-family: "Courier New", monospace;
+  letter-spacing: 1px;
+}
+
+.caption-minimal {
+  font-family: "Quicksand", sans-serif;
+  font-weight: 300;
+}
+
+.caption-sepia {
+  color: #704214;
+}
+
+.caption-charcoal {
+  color: #36454f;
+}
+
+/* Stickers */
+.sticker {
+  position: absolute;
+  cursor: grab;
+  z-index: 10;
+  transition: transform 0.1s;
+  filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.2));
+}
+
+.sticker:active {
+  cursor: grabbing;
+}
+
+.sticker i {
+  font-size: inherit;
+  color: inherit;
+}
+
+.sticker .delete-btn {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  width: 20px;
+  height: 20px;
+  background: #ff4757;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 12px;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.3s;
+  z-index: 11;
+}
+
+.sticker:hover .delete-btn {
+  opacity: 1;
+}
+
+/* Toolbars */
+.album-toolbar {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: white;
+  border-radius: 10px;
+  padding: 15px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+}
+
+.toolbar-group {
+  margin-bottom: 15px;
+}
+
+.toolbar-group h3 {
+  font-size: 14px;
+  margin-bottom: 8px;
+  color: #5a3921;
+}
+
+.tool-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  border: 2px solid #ddd;
+  background: white;
+  margin: 0 5px 5px 0;
+  cursor: pointer;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px;
+  transition: all 0.3s;
+}
+
+.tool-btn:hover {
+  border-color: #a1886f;
+  transform: translateY(-3px);
+}
+
+.tool-btn.active {
+  border-color: #a1886f;
+  background: #f9f5f0;
+}
+
+.sticker-palette {
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 200px;
+}
+
+.sticker-item {
+  width: 40px;
+  height: 40px;
+  margin: 5px;
+  cursor: grab;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
+  transition: transform 0.2s;
+}
+
+.sticker-item:hover {
+  transform: scale(1.2);
+}
+
+.close-album-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 50px;
+  height: 50px;
+  background: white;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
+  cursor: pointer;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+  transition: all 0.3s;
+}
+
+.close-album-btn:hover {
+  background: #f8f3e6;
+  transform: rotate(90deg);
+}
+
+.page-nav {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 20px;
+  z-index: 100;
+}
+
+.page-btn {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: white;
+  border: none;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  font-size: 24px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.3s;
+}
+
+.page-btn:hover {
+  transform: scale(1.1);
+  background: #f8f3e6;
+}
+
+/* Animation classes */
+
+.page-turn {
+  transform: rotateY(-180deg);
+  z-index: 3;
+}
+
+.tilt-left {
+  transform: rotate(-3deg);
+}
+
+.tilt-right {
+  transform: rotate(3deg);
+}
+
+.floating {
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+/* Create album button */
+.create-album-btn {
+  width: 200px;
+  height: 280px;
+  background: rgba(255, 255, 255, 0.2);
+  border: 3px dashed rgba(255, 255, 255, 0.5);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.create-album-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+  border-color: white;
+  transform: translateY(-5px);
+}
+
+.create-album-btn i {
+  font-size: 48px;
+  margin-bottom: 15px;
+}
+
+.sticker-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+}
+.resize-handle {
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+  border: 2px solid rgba(0, 0, 0, 0.3);
+  background: rgba(255, 255, 255, 0.8);
+  cursor: se-resize;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+.polaroid-controls {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  display: flex;
+  gap: 4px;
+  opacity: 0;
+  transition: opacity 0.2s;
+  z-index: 5;
+}
+
+.polaroid:hover .polaroid-controls {
+  opacity: 1;
+}
+
+.polaroid-btn {
+  width: 22px;
+  height: 22px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 11px;
+  padding: 0;
+}
+
+.polaroid-btn:hover {
+  background: #ffebcc;
+}
+
+.polaroid-btn.polaroid-delete:hover {
+  background: #ff4d4f;
+  color: #fff;
+}
+
+.album-delete-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 14px;
+  padding: 0;
+  transition: transform 0.15s ease, background 0.15s ease, color 0.15s ease;
+}
+
+.album-delete-btn:hover {
+  background: #ff4d4f;
+  color: #fff;
+  transform: scale(1.05);
+}

@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Polaroid Memory Book</title>
+
+    <!-- Icons & Fonts -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Gochi+Hand&family=Indie+Flower&family=Quicksand:wght@300;400;500;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- External CSS -->
+    <link rel="stylesheet" href="polaroid.css" />
+  </head>
+  <body>
+    <div class="shelf-container">
+      <div class="shelf"></div>
+      <div class="books-container" id="booksContainer">
+        <!-- Albums will be dynamically added here -->
+        <div class="create-album-btn" id="createAlbumBtn">
+          <i class="fas fa-plus-circle"></i>
+          <span>Create New Album</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal for creating new album -->
+    <div class="modal" id="createAlbumModal">
+      <div class="modal-content">
+        <h2>Create New Memory Album</h2>
+        <div class="form-group">
+          <label for="albumName">Album Name</label>
+          <input
+            type="text"
+            id="albumName"
+            placeholder="Summer 2023, Travel Adventures..."
+          />
+        </div>
+        <div class="form-group">
+          <label for="albumDescription">Description (optional)</label>
+          <textarea
+            id="albumDescription"
+            rows="3"
+            placeholder="What's this album about?"
+          ></textarea>
+        </div>
+        <div class="form-group">
+          <label>Cover Photo</label>
+          <div class="upload-area" id="coverUploadArea">
+            <i class="fas fa-cloud-upload-alt"></i>
+            <p>Click to upload or drag & drop</p>
+            <p>Recommended: 400x560px or larger</p>
+          </div>
+          <input
+            type="file"
+            id="coverFileInput"
+            accept="image/*"
+            style="display: none"
+          />
+        </div>
+        <div class="form-group text-center">
+          <button class="btn btn-secondary" id="cancelAlbumBtn">Cancel</button>
+          <button class="btn btn-primary" id="saveAlbumBtn">
+            Create Album
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Album viewer -->
+    <div class="album-viewer" id="albumViewer">
+      <div class="close-album-btn" id="closeAlbumBtn">
+        <i class="fas fa-times"></i>
+      </div>
+
+      <div class="album-toolbar">
+        <div class="toolbar-group">
+          <h3>Backgrounds</h3>
+          <div>
+            <button class="tool-btn" data-bg="kraft" title="Kraft Paper">
+              <i class="fas fa-scroll"></i>
+            </button>
+            <button class="tool-btn" data-bg="grid" title="Grid Paper">
+              <i class="fas fa-th-large"></i>
+            </button>
+            <button class="tool-btn" data-bg="pastel" title="Pastel">
+              <i class="fas fa-palette"></i>
+            </button>
+            <button class="tool-btn active" data-bg="clean" title="Clean White">
+              <i class="fas fa-square"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="toolbar-group">
+          <h3>Add Photo</h3>
+          <button class="tool-btn" id="addPhotoBtn" title="Upload Photo">
+            <i class="fas fa-camera"></i>
+          </button>
+          <input
+            type="file"
+            id="photoFileInput"
+            accept="image/*"
+            multiple
+            style="display: none"
+          />
+        </div>
+
+        <div class="toolbar-group">
+          <h3>Stickers</h3>
+          <div class="sticker-palette">
+            <div
+              class="sticker-item"
+              draggable="true"
+              data-sticker="plane"
+              title="Plane"
+            >
+              <i class="fas fa-plane"></i>
+            </div>
+            <div
+              class="sticker-item"
+              draggable="true"
+              data-sticker="map"
+              title="Map"
+            >
+              <i class="fas fa-map-marked-alt"></i>
+            </div>
+            <div
+              class="sticker-item"
+              draggable="true"
+              data-sticker="camera"
+              title="Camera"
+            >
+              <i class="fas fa-camera"></i>
+            </div>
+            <div
+              class="sticker-item"
+              draggable="true"
+              data-sticker="heart"
+              title="Heart"
+            >
+              <i class="fas fa-heart"></i>
+            </div>
+            <div
+              class="sticker-item"
+              draggable="true"
+              data-sticker="star"
+              title="Star"
+            >
+              <i class="fas fa-star"></i>
+            </div>
+            <div
+              class="sticker-item"
+              draggable="true"
+              data-sticker="cloud"
+              title="Cloud"
+            >
+              <i class="fas fa-cloud"></i>
+            </div>
+            <div
+              class="sticker-item"
+              draggable="true"
+              data-sticker="sun"
+              title="Sun"
+            >
+              <i class="fas fa-sun"></i>
+            </div>
+            <div
+              class="sticker-item"
+              draggable="true"
+              data-sticker="coffee"
+              title="Coffee"
+            >
+              <i class="fas fa-coffee"></i>
+            </div>
+            <div
+              class="sticker-item"
+              draggable="true"
+              data-sticker="book"
+              title="Book"
+            >
+              <i class="fas fa-book"></i>
+            </div>
+            <div
+              class="sticker-item"
+              draggable="true"
+              data-sticker="music"
+              title="Music"
+            >
+              <i class="fas fa-music"></i>
+            </div>
+            <div
+              class="sticker-item"
+              draggable="true"
+              data-sticker="flag"
+              title="Flag"
+            >
+              <i class="fas fa-flag"></i>
+            </div>
+            <div
+              class="sticker-item"
+              draggable="true"
+              data-sticker="gift"
+              title="Gift"
+            >
+              <i class="fas fa-gift"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="book-3d" id="book3d">
+        <!-- Pages will be dynamically added here -->
+      </div>
+
+      <div class="page-nav">
+        <button class="page-btn" id="prevPageBtn">
+          <i class="fas fa-chevron-left"></i>
+        </button>
+        <button class="page-btn" id="nextPageBtn">
+          <i class="fas fa-chevron-right"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- External JS (keep at end so DOM is loaded) -->
+    <script src="polaroid.js"></script>
+  </body>
+</html>
