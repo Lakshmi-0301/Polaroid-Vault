@@ -1,11 +1,6 @@
-Here is a **clean, aesthetic, professional README** for your Polaroid-memory-garden scrapbook app.
-You can paste this directly into your GitHub README.md 🌿📸✨
+#  Polaroid Vault
 
----
-
-# \*\*Polaroid Vault
-
-**Polaroid Vault** is a whimsical, aesthetic digital scrapbook where users can create a personal album filled with photos, polaroids and stickers
+**Polaroid Vault** is a whimsical, aesthetic digital scrapbook where users can create a personal album filled with photos, polaroids and stickers.
 
 ---
 
